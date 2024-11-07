@@ -4,6 +4,6 @@ export const metaData: Metadata = {
   title: 'Tickets',
 };
 
-export default function TicketsPage() {
+export default function TicketsFormPage() {
   return <div>TicketsPage</div>;
 }
