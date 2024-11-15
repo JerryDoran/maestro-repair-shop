@@ -1,6 +1,7 @@
 import BackButton from '@/components/back-button';
 import { getCustomer } from '@/lib/queries/get-customer';
 import { getTicket } from '@/lib/queries/get-ticket';
+import TicketForm from './_components/ticket-form';
 
 export default async function TicketsFormPage({
   searchParams,
@@ -46,7 +47,7 @@ export default async function TicketsFormPage({
       }
 
       // Return ticket form
-      console.log(customer);
+      return <TicketForm customer={customer} />;
     }
 
     // Edit ticket if a ticketId is supplied to the searchParams
@@ -64,8 +65,9 @@ export default async function TicketsFormPage({
       const customer = await getCustomer(ticket.customerId);
 
       // return ticket form
-      console.log('ticket: ', ticket);
-      console.log('customer: ', customer);
+      console.log('TICKET: ', ticket);
+      console.log('CUSTOMER: ', customer);
+      return <TicketForm customer={customer} ticket={ticket} />;
     }
   } catch (error) {
     if (error instanceof Error) {
