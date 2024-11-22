@@ -2,15 +2,18 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
-import InputWithLabel from '@/components/inputs/input-with-label';
-
 import {
   insertCustomerSchema,
   type insertCustomerSchemaType,
   type selectCustomerSchemaType,
 } from '@/zod-schemas/customer';
+import { states } from '@/constants/states-array';
+
+import { Form } from '@/components/ui/form';
+import { Button } from '@/components/ui/button';
+import InputWithLabel from '@/components/inputs/input-with-label';
+import TextareaWithLabel from '@/components/inputs/textarea-with-label';
+import SelectWithLabel from '@/components/inputs/select-with-label';
 
 type CustomerFormProps = {
   customer?: selectCustomerSchemaType;
@@ -78,8 +81,50 @@ export default function CustomerForm({ customer }: CustomerFormProps) {
               fieldTitle='City'
               nameInSchema='city'
             />
+            <SelectWithLabel<insertCustomerSchemaType>
+              fieldTitle='State'
+              nameInSchema='state'
+              data={states}
+            />
           </div>
-          <p>{JSON.stringify(form.getValues())}</p>
+          <div className='flex flex-col gap-4 w-full max-w-xs'>
+            <InputWithLabel<insertCustomerSchemaType>
+              fieldTitle='Zip Code'
+              nameInSchema='zip'
+            />
+            <InputWithLabel<insertCustomerSchemaType>
+              fieldTitle='Email'
+              nameInSchema='email'
+            />
+            <InputWithLabel<insertCustomerSchemaType>
+              fieldTitle='Phone'
+              nameInSchema='phone'
+            />
+            <TextareaWithLabel<insertCustomerSchemaType>
+              fieldTitle='Notes'
+              nameInSchema='notes'
+              className='h-40'
+            />
+
+            <div className='flex gap-2'>
+              <Button
+                type='submit'
+                className='w-3/4'
+                variant='default'
+                title='Save'
+              >
+                Save
+              </Button>
+              <Button
+                type='button'
+                variant='destructive'
+                title='Reset'
+                onClick={() => form.reset(defaultValues)}
+              >
+                Reset
+              </Button>
+            </div>
+          </div>
         </form>
         {/* <Button></Button> */}
       </Form>
