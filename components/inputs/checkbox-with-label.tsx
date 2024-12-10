@@ -14,12 +14,14 @@ type CheckboxWithLabelProps<S> = {
   fieldTitle: string;
   nameInSchema: keyof S & string;
   message: string;
+  disabled?: boolean;
 };
 
 export default function CheckboxWithLabel<S>({
   fieldTitle,
   nameInSchema,
   message,
+  disabled = false,
 }: CheckboxWithLabelProps<S>) {
   const form = useFormContext();
 
@@ -40,6 +42,7 @@ export default function CheckboxWithLabel<S>({
                 {...field}
                 checked={field.value}
                 onCheckedChange={field.onChange}
+                disabled={disabled}
               />
             </FormControl>
             {message}
