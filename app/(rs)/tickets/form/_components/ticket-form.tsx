@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -8,6 +9,11 @@ import InputWithLabel from '@/components/inputs/input-with-label';
 import TextareaWithLabel from '@/components/inputs/textarea-with-label';
 import SelectWithLabel from '@/components/inputs/select-with-label';
 import CheckboxWithLabel from '@/components/inputs/checkbox-with-label';
+import { useToast } from '@/hooks/use-toast';
+import { useAction } from 'next-safe-action/hooks';
+import { saveTicketAction } from '@/actions/save-ticket-action';
+import { Loader2 } from 'lucide-react';
+import DisplayServerActionResponse from '@/components/display-server-action-response';
 
 import {
   insertTicketSchema,
@@ -34,6 +40,8 @@ export default function TicketForm({
 }: TicketFormProps) {
   const isManager = Array.isArray(techs);
 
+  const { toast } = useToast();
+
   const defaultValues: insertTicketSchemaType = {
     id: ticket?.id ?? '(New)',
     customerId: ticket?.customerId ?? customer.id,
@@ -49,12 +57,38 @@ export default function TicketForm({
     defaultValues,
   });
 
+  const {
+    execute: executeSave,
+    result: saveResult,
+    isPending: isSaving,
+    reset: resetSaveAction,
+  } = useAction(saveTicketAction, {
+    onSuccess: ({ data }) => {
+      if (data?.message) {
+        toast({
+          variant: 'default',
+          title: 'Success! 🎉',
+          description: data?.message,
+        });
+      }
+    },
+
+    onError: ({ error }) => {
+      toast({
+        variant: 'destructive',
+        title: 'Error 🥲',
+        description: 'Something went wrong!',
+      });
+    },
+  });
+
   async function submitForm(data: insertTicketSchemaType) {
-    console.log(data);
+    executeSave(data);
   }
 
   return (
     <div className='flex flex-col gap-1 sm:px-8'>
+      <DisplayServerActionResponse result={saveResult} />
       <div>
         <h2 className='text-2xl font-bold'>
           {ticket?.id && isEditable
@@ -135,14 +169,24 @@ export default function TicketForm({
                   className='w-3/4'
                   variant='default'
                   title='Save'
+                  disabled={isSaving}
                 >
-                  Save
+                  {isSaving ? (
+                    <>
+                      <Loader2 className='mr-2 size-4 animate-spin' /> Saving...
+                    </>
+                  ) : (
+                    'Save'
+                  )}
                 </Button>
                 <Button
                   type='button'
                   variant='destructive'
                   title='Reset'
-                  onClick={() => form.reset(defaultValues)}
+                  onClick={() => {
+                    form.reset(defaultValues);
+                    resetSaveAction();
+                  }}
                 >
                   Reset
                 </Button>

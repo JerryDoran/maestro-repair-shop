@@ -21,7 +21,8 @@ import InputWithLabel from '@/components/inputs/input-with-label';
 import TextareaWithLabel from '@/components/inputs/textarea-with-label';
 import SelectWithLabel from '@/components/inputs/select-with-label';
 import CheckboxWithLabel from '@/components/inputs/checkbox-with-label';
-import { Loader, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import DisplayServerActionResponse from '@/components/display-server-action-response';
 
 type CustomerFormProps = {
   customer?: selectCustomerSchemaType;
@@ -57,15 +58,17 @@ export default function CustomerForm({ customer }: CustomerFormProps) {
   const {
     execute: executeSave,
     result: saveResult,
-    isExecuting: isSaving,
+    isPending: isSaving,
     reset: resetSaveAction,
   } = useAction(saveCustomerAction, {
     onSuccess: ({ data }) => {
-      toast({
-        variant: 'default',
-        title: 'Success! 🎉',
-        description: data?.message,
-      });
+      if (data?.message) {
+        toast({
+          variant: 'default',
+          title: 'Success! 🎉',
+          description: data?.message,
+        });
+      }
     },
 
     onError: ({ error }) => {
@@ -83,6 +86,7 @@ export default function CustomerForm({ customer }: CustomerFormProps) {
 
   return (
     <div className='flex flex-col gap-1 sm:px-8'>
+      <DisplayServerActionResponse result={saveResult} />
       <div>
         <h2 className='text-2xl font-bold'>
           {customer?.id ? 'Edit' : 'New'} Customer{' '}

@@ -31,9 +31,22 @@ export default function DisplayServerActionResponse({ result }: Props) {
 
   return (
     <div>
-      {' '}
       {data?.message && (
-        <MessageBox type='success' content={`Sucess : ${data.message}`} />
+        <MessageBox type='success' content={`Success : ${data.message}`} />
+      )}
+
+      {serverError && <MessageBox type='error' content={serverError} />}
+
+      {validationErrors && (
+        <MessageBox
+          type='error'
+          content={Object.keys(validationErrors).map((key) => (
+            <p key={key}>
+              {`${key}:
+              ${validationErrors[key as keyof typeof validationErrors]}`}
+            </p>
+          ))}
+        />
       )}
     </div>
   );
