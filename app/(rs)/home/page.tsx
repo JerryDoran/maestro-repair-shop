@@ -1,9 +1,14 @@
-import { Metadata } from 'next';
+'use client';
 
-export const metaData: Metadata = {
-  title: 'Home',
-};
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
-  return <div>HomePage</div>;
+  const router = useRouter();
+  
+  useEffect(() => {
+    router.push('/tickets');
+  }, [router]);
+  
+  return null;
 }
