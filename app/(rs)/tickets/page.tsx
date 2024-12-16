@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import TicketSearch from './_components/ticket-search';
 import { getTicketSearchResults } from '@/lib/queries/get-tickets-search-results';
 import { getOpenTickets } from '@/lib/queries/get-open-tickets';
+import TicketTable from './_components/ticket-table';
 
 export const metaData: Metadata = {
   title: 'Tickets Search',
@@ -19,7 +20,11 @@ export default async function TicketsFormPage({
     return (
       <>
         <TicketSearch />
-        <p>{JSON.stringify(results, null, 2)}</p>
+        {results.length > 0 ? (
+          <TicketTable data={results} />
+        ) : (
+          <p className='mt-4'>No open tickets found</p>
+        )}
       </>
     );
   }
@@ -29,7 +34,11 @@ export default async function TicketsFormPage({
   return (
     <div className='space-y-4'>
       <TicketSearch />
-      <p>{JSON.stringify(results, null, 2)}</p>
+      {results.length > 0 ? (
+        <TicketTable data={results} />
+      ) : (
+        <p className='mt-4'>No results found</p>
+      )}
     </div>
   );
 }
