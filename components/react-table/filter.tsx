@@ -3,12 +3,15 @@ import DebouncedInput from './debounced-input';
 
 type FilterProps<T> = {
   column: Column<T, unknown>;
+  filteredRows: string[];
 };
 
-export default function Filter<T>({ column }: FilterProps<T>) {
+export default function Filter<T>({ column, filteredRows }: FilterProps<T>) {
   const columnFilterValue = column.getFilterValue();
 
-  const sortedUniqueValues = [...column.getFacetedUniqueValues().keys()].sort();
+  const uniqueFilterdValues = new Set(filteredRows);
+
+  const sortedUniqueValues = [...uniqueFilterdValues].sort();
 
   return (
     <>
@@ -23,9 +26,7 @@ export default function Filter<T>({ column }: FilterProps<T>) {
         type='text'
         value={(columnFilterValue ?? '') as string}
         onChange={(value) => column.setFilterValue(value)}
-        placeholder={`Search... (${
-          [...column.getFacetedUniqueValues()].filter((arr) => arr[0]).length
-        })`}
+        placeholder={`Search... (${uniqueFilterdValues.size})`}
         className='w-full border shadow rounded bg-card'
         list={column.id + '-list'}
       />

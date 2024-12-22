@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import BackButton from '@/components/back-button';
 import { getCustomer } from '@/lib/queries/get-customer';
 import { getTicket } from '@/lib/queries/get-ticket';
@@ -121,8 +122,8 @@ export default async function TicketsFormPage({
 
         const techs = users
           ? users.map((user) => ({
-              id: user.email!,
-              description: user.email!,
+              id: user.email?.toLowerCase()!,
+              description: user.email?.toLowerCase()!,
             }))
           : [];
         return <TicketForm customer={customer} ticket={ticket} techs={techs} />;
