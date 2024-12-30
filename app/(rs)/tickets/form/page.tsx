@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import BackButton from '@/components/back-button';
 import { getCustomer } from '@/lib/queries/get-customer';
 import { getTicket } from '@/lib/queries/get-ticket';
