@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { usePolling } from '@/hooks/use-polling';
 import type { TicketSearchResultsType } from '@/lib/queries/get-tickets-search-results';
@@ -162,6 +163,17 @@ export default function TicketTable({ data }: TicketTableProps) {
     getSortedRowModel: getSortedRowModel(),
   });
 
+  useEffect(() => {
+    const currentPageIndex = table.getState().pagination.pageIndex + 1;
+    const pageCount = table.getPageCount();
+
+    if (pageCount <= currentPageIndex && currentPageIndex > 0) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', '1');
+      router.replace(`?${params.toString()}`, { scroll: false });
+    }
+  }, [table.getState().columnFilters]);
+
   return (
     <div className='mt-6 flex flex-col gap-4'>
       <div className='rounded-lg overflow-hidden border border-border'>
@@ -221,9 +233,10 @@ export default function TicketTable({ data }: TicketTableProps) {
       <div className='flex items-center justify-between gap-1 flex-wrap'>
         <div>
           <p className='whitespace-nowrap font-bold text-sm'>
-            {`Page ${
-              table.getState().pagination.pageIndex + 1
-            } of ${table.getPageCount()}`}
+            {`Page ${table.getState().pagination.pageIndex + 1} of ${Math.max(
+              1,
+              table.getPageCount()
+            )}`}
             &nbsp;&nbsp;
             {`[${table.getFilteredRowModel().rows.length} ${
               table.getFilteredRowModel().rows.length !== 1

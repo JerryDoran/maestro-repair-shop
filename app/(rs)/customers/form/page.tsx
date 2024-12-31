@@ -43,10 +43,16 @@ export default async function CustomerFormPage({
       }
 
       // Put customer form component
-      return <CustomerForm isManager={isManager} customer={customer} />;
+      return (
+        <CustomerForm
+          key={customerId} // key is used to force re-render of the component when the customer changes
+          isManager={isManager}
+          customer={customer}
+        />
+      );
     } else {
       // new customer form component
-      return <CustomerForm isManager={isManager} />;
+      return <CustomerForm key='new' isManager={isManager} />;
     }
   } catch (error) {
     if (error instanceof Error) {

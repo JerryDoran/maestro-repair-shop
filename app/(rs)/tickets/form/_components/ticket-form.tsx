@@ -37,7 +37,7 @@ export default function TicketForm({
   ticket,
   techs,
   isEditable = true,
-  isManager = false,
+  isManager = true,
 }: TicketFormProps) {
   const { toast } = useToast();
 
